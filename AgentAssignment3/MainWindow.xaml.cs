@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -39,5 +40,35 @@ namespace AgentAssignment3
             clock.Update();
         }
 
+        private void SortByComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //Agent[] ag = ListBoxAgents.Items.Cast<Agent>().ToArray();
+
+            ComboBoxItem _comboBoxItem = e.AddedItems[0] as ComboBoxItem;
+            string sortBy;
+
+            if (_comboBoxItem != null)
+            {
+                sortBy = _comboBoxItem.Tag.ToString();
+
+                SortDescription sd = new SortDescription(sortBy, ListSortDirection.Ascending);
+                ICollectionView cv = CollectionViewSource.GetDefaultView(DataContext);
+
+                if (cv != null)
+                {
+                    cv.SortDescriptions.Clear();
+                    if (sortBy != "None")
+                        cv.SortDescriptions.Add(sd);
+                }
+            }
+        }
+
+        private void SortBySpecialityComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBoxItem _comboBoxItem = e.AddedItems[0] as ComboBoxItem;
+
+            ICollectionView cv = CollectionViewSource.GetDefaultView(ListBoxAgents);
+
+        }
     }
 }

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AgentAssignment3"
+        xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="796.708">
 
@@ -36,13 +37,22 @@
             </Style.Triggers>
         </Style>
 
-        <Style TargetType="{x:Type Label}">
+        <Style x:Key="LabelStyle" TargetType="{x:Type Label}">
             <Style.Setters>
                 <Setter Property="Foreground" Value="DarkSlateGray" />
                 <Setter Property="Margin" Value="1"/>
             </Style.Setters>
-
         </Style>
+
+        <Style x:Key="ToolbarLabelStyle" TargetType="{x:Type Label}">
+            <Style.Setters>
+                <Setter Property="Foreground" Value="DarkSlateGray" />
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property ="FontSize" Value="12"></Setter>
+                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            </Style.Setters>
+        </Style>
+
         <Style TargetType="{x:Type ListBox}">
             <Style.Setters>
                 <Setter Property="Foreground" Value="DarkSlateGray" />
@@ -82,7 +92,6 @@
                 <TextBlock Text="{Binding Assignment}" Width="100" Padding="5,2" Foreground="{Binding ID, Converter={StaticResource IdColorConverter}}"></TextBlock>
             </WrapPanel>
         </DataTemplate>
-
     </Window.Resources>
 
 
@@ -127,14 +136,28 @@
             </Button>
             <Button x:Name="AddBttnTool" Margin="5" Command="{Binding AddCommand}" Content="+"></Button>
             <Button x:Name="RemoveBttnTool" Margin="5" Command="{Binding DeleteCommand}" Content="-"></Button>
-            <Label Content="File _Name: " 
-                   FontSize="12"
-                   VerticalAlignment="Center" Target="{Binding ElementName=tbxFileName}" />
+            <Label Content="File _Name: " Target="{Binding ElementName=tbxFileName}" Style="{StaticResource ToolbarLabelStyle}"/>
             <TextBox Name="tbxFileName"
                      FontSize="12"
                      VerticalAlignment="Center"
                      MinWidth="100"
             />
+            <Label Content="Sort by: "  Style="{StaticResource ToolbarLabelStyle}"></Label>
+            <ComboBox Name="SortByComboBox" SelectedIndex="0" Width="130" FontSize="12" Margin="5" SelectionChanged="SortByComboBox_SelectionChanged">
+                <ComboBoxItem Tag="None">None</ComboBoxItem>
+                <ComboBoxItem Tag="ID">ID</ComboBoxItem>
+                <ComboBoxItem Tag="CodeName">CodeName</ComboBoxItem>
+                <ComboBoxItem Tag="Speciality">Speciality</ComboBoxItem>
+            </ComboBox>
+
+            <Label Content="Speciality: "  Style="{StaticResource ToolbarLabelStyle}"></Label>
+            <ComboBox Name="SortBySpecialityComboBox" SelectedIndex="0" Width="130" FontSize="12" Margin="5" SelectionChanged="SortBySpecialityComboBox_SelectionChanged">
+                <ComboBoxItem Tag="None">None</ComboBoxItem>
+                <ComboBoxItem Tag="Assassination">Assassination</ComboBoxItem>
+                <ComboBoxItem Tag="Martinis">Martinis</ComboBoxItem>
+                <ComboBoxItem Tag="Ladies">Ladies</ComboBoxItem>
+                <ComboBoxItem Tag="Goldfinger">Goldfinger</ComboBoxItem>
+            </ComboBox>
         </ToolBar>
 
         <Grid Grid.Row="2">
@@ -172,7 +195,7 @@
 
                 <TextBox x:Name="TextBoxID" Grid.Row="0" MinWidth="200" Text="{Binding Path = ID}" Style="{StaticResource JamesStyle}"></TextBox>
                 <TextBox x:Name="TextBoxCodeName" Grid.Row="1" Text="{Binding Path = CodeName}" Style="{StaticResource TextBoxStyle}" ></TextBox>
-                <ComboBox Name="ComboBoxSpeciality" Margin="5"  Grid.Row="2" SelectedItem="{Binding Speciality}" ItemsSource="{StaticResource SpecialitiesCollection}"></ComboBox>
+                <ComboBox Name="ComboBoxSpeciality" Margin="5" Grid.Row="2" SelectedItem="{Binding Speciality}" ItemsSource="{StaticResource SpecialitiesCollection}"></ComboBox>
                 <!--<TextBox x:Name="TextBoxSpeciality" Grid.Row="2" Text="{Binding Path = Speciality}" Style="{StaticResource TextBoxStyle}"></TextBox>-->
                 <TextBox x:Name="TextBoxAssignment" Grid.Row="3" MinHeight="100" Text="{Binding Path = Assignment}" Style="{StaticResource TextBoxStyle}"></TextBox>
                 <Button Grid.Row="4" Margin="5" Width="100" HorizontalAlignment="Left" Content="Test"></Button>
