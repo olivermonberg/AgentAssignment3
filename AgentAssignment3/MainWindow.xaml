@@ -5,14 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AgentAssignment3"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="796.708">
 
 
     <Window.Resources>
         <SolidColorBrush x:Key="myBrush" Color="LightGray" />
+        <local:AgentIdToColorValueConverter x:Key="IdColorConverter" />
+        <local:Specialities x:Key="SpecialitiesCollection"/>
 
 
-        <Style TargetType="{x:Type TextBox}">
+        <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
             <Style.Setters>
                 <Setter Property="Foreground" Value="DarkSlateGray" />
                 <Setter Property="Background" Value="Beige" />
@@ -26,13 +28,13 @@
             </Style.Triggers>
         </Style>
 
-        <!--<Style x:Key="TextBoxIDStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource GenerelTextBoxStyle}">
+        <Style x:Key="JamesStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxStyle}">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding ID}" Value="007">
-                    <Setter  Property="Foreground" Value="Red"></Setter>
+                <DataTrigger Binding="{Binding Path=ID}" Value="007">
+                    <Setter Property="Foreground" Value="Red"></Setter>
                 </DataTrigger>
             </Style.Triggers>
-        </Style>-->
+        </Style>
 
         <Style TargetType="{x:Type Label}">
             <Style.Setters>
@@ -70,8 +72,16 @@
                     <!--<Setter Property="Background" Value="Red" ></Setter>-->
                 </Trigger>
             </Style.Triggers>
-
         </Style>
+
+        <DataTemplate x:Key="AgentListBoxDT">
+            <WrapPanel>
+                <TextBlock Text="{Binding ID}" Width="40" Padding="5,2" Foreground="{Binding ID, Converter={StaticResource IdColorConverter}}"></TextBlock>
+                <TextBlock Text="{Binding CodeName}" Width="100" Padding="5,2" Foreground="{Binding ID, Converter={StaticResource IdColorConverter}}"></TextBlock>
+                <TextBlock Text="{Binding Speciality}" Width="150" Padding="5,2" Foreground="{Binding ID, Converter={StaticResource IdColorConverter}}"></TextBlock>
+                <TextBlock Text="{Binding Assignment}" Width="100" Padding="5,2" Foreground="{Binding ID, Converter={StaticResource IdColorConverter}}"></TextBlock>
+            </WrapPanel>
+        </DataTemplate>
 
     </Window.Resources>
 
@@ -130,7 +140,7 @@
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -160,10 +170,11 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBox x:Name="TextBoxID" Grid.Row="0" MinWidth="200" Text="{Binding Path = ID}" Style="{StaticResource TextBoxIDStyle}"></TextBox>
-                <TextBox x:Name="TextBoxCodeName" Grid.Row="1" Text="{Binding Path = CodeName}" ></TextBox>
-                <TextBox x:Name="TextBoxSpeciality" Grid.Row="2" Text="{Binding Path = Speciality}" ></TextBox>
-                <TextBox x:Name="TextBoxAssignment" Grid.Row="3" MinHeight="100" Text="{Binding Path = Assignment}" ></TextBox>
+                <TextBox x:Name="TextBoxID" Grid.Row="0" MinWidth="200" Text="{Binding Path = ID}" Style="{StaticResource JamesStyle}"></TextBox>
+                <TextBox x:Name="TextBoxCodeName" Grid.Row="1" Text="{Binding Path = CodeName}" Style="{StaticResource TextBoxStyle}" ></TextBox>
+                <ComboBox Name="ComboBoxSpeciality" Margin="5"  Grid.Row="2" SelectedItem="{Binding Speciality}" ItemsSource="{StaticResource SpecialitiesCollection}"></ComboBox>
+                <!--<TextBox x:Name="TextBoxSpeciality" Grid.Row="2" Text="{Binding Path = Speciality}" Style="{StaticResource TextBoxStyle}"></TextBox>-->
+                <TextBox x:Name="TextBoxAssignment" Grid.Row="3" MinHeight="100" Text="{Binding Path = Assignment}" Style="{StaticResource TextBoxStyle}"></TextBox>
                 <Button Grid.Row="4" Margin="5" Width="100" HorizontalAlignment="Left" Content="Test"></Button>
 
 
@@ -178,8 +189,9 @@
 
             <Grid Grid.Column="2">
                 <ListBox x:Name="ListBoxAgents" ItemsSource="{Binding}"
-                         DisplayMemberPath="CodeName" IsSynchronizedWithCurrentItem="True"
-                         SelectedIndex="{Binding Path=CurrentIndex}"></ListBox>
+                         IsSynchronizedWithCurrentItem="True"
+                         SelectedIndex="{Binding Path=CurrentIndex}"
+                         ItemTemplate="{StaticResource AgentListBoxDT}"></ListBox>
 
 
             </Grid>

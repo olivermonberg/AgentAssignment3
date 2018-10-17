@@ -22,6 +22,8 @@ namespace AgentAssignment3
 
         public Agents()
         {
+            Add(new Agent("001", "Nina", "Assassination", "UpperVolta"));
+            Add(new Agent("007", "James Bond", "Martinis", "North Korea"));
         }
 
         #region Commands
